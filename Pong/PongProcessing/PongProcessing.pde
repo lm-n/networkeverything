@@ -1,10 +1,21 @@
 import processing.serial.*;
+import ddf.minim.*;
+
+Minim minim;
+AudioPlayer sound1;
+AudioPlayer sound2;
+AudioPlayer sound3;
+AudioPlayer sound;
+AudioPlayer[] sounds = new AudioPlayer[4];
 
 Serial myPort;
+
 String resultString;
+
 PImage img1;
 PImage img2;
 PImage img3;
+
 float leftPaddle, rightPaddle;
 int resetButton, serveButton;
 int leftPaddleX, rightPaddleX;
@@ -31,7 +42,7 @@ int fontSize = 36;
 void setup(){
   size(640, 480);
   
-  String portName = Serial.list()[3];
+  String portName = Serial.list()[0];
   myPort = new Serial(this, portName, 115200);
   
   myPort.bufferUntil('\n');
@@ -51,15 +62,26 @@ void setup(){
   
   PFont myFont = createFont(PFont.list()[2], fontSize);
   textFont(myFont);
-  img1 = loadImage("data/Luigi.png");
-  img2 = loadImage("data/abhi.png");
-  img3 = loadImage("data/scotto.png");
+  img3 = loadImage("data/Luigi.png");
+  img1 = loadImage("data/abhi.png");
+  img2 = loadImage("data/scotto.png");
+  
+  minim = new Minim(this);
+  //animal sounds: http://www.orangefreesounds.com/
+  sound1 = minim.loadFile("data/chicken.mp3");
+  sound2 = minim.loadFile("data/hyena.mp3");
+  sound3 = minim.loadFile("data/sheep.mp3");
+  sound = minim.loadFile("data/ParovStelar.mp3"); //From here: http://mp3pm.name/
+  sound.loop();
+  sounds[0] = sound;
+  sounds[1] = sound1;
+  sounds[2] = sound2;
+  sounds[3] = sound3;
 }
 
 void draw() {
   background(#044f6f);
   fill(#ffffff);
-  
   rect(leftPaddleX, leftPaddle, paddleWidth, paddleHeight);
   rect(rightPaddleX, rightPaddle, paddleWidth, paddleHeight);
   
@@ -94,11 +116,15 @@ void serialEvent(Serial myPort){
   println(int(split(inputString, ',')));
   
   if (sensors.length == 5){
-    leftPaddle = map(sensors[0], leftMinimum, leftMaximum, 0, height);
-    rightPaddle = map(sensors[1], rightMinimum, rightMaximum, 0, height);
+    leftPaddle = map(sensors[1], leftMinimum, leftMaximum, 0, height);
+    rightPaddle = map(sensors[0], rightMinimum, rightMaximum, 0, height);
     resetButton = sensors[2];
     serveButton = sensors[3];
     imgNum = sensors[4];
+    for (int i = 1; i <4; i ++){
+      sounds[i].pause();
+    }
+    sounds[imgNum].play();
     resultString += "left: " + leftPaddle + "\tright: " + rightPaddle;
     resultString += "\treset: " + resetButton + "\tserve:" + serveButton;
   }
