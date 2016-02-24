@@ -1,4 +1,3 @@
-# pongnetworkseverything
-project 1 for networkseverything
+#networkeverything
 
 more info: lmnneterr.tumblr.com
