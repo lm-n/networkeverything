@@ -66,7 +66,7 @@ void loop() {
 
           // HTML5 asks for CSS to change background color
           client.println("<style>");
-          client.println("body{background-color: rgb(200,200,200)}");
+          client.println("body{background-color: rgb(41, 41, 188); font-family: sans-serif; font-size: 30px; color: white}; text-align: center;");
           client.println("</style>");
           client.println("</head>");
           // close the <head> tag above
