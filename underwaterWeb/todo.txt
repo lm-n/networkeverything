@@ -1,0 +1,4 @@
+TODO
+
+1. Count number of times water drinked
+2. Count last time of water drinked
